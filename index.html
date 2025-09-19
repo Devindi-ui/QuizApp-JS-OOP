@@ -18,7 +18,7 @@
         <div class="content">
             <!-- welcome screen -->
              <div class="screen welcome-screen active" id="welcomeScreen">
-                <i class="fas-fa-brain"></i>
+                <i class="fas fa-brain welcome-icon"></i>
              </div>
              <h2 class="welcome-message">Welcome to QuizMaster! Challlenge 
                 yourself with various quiz types and improve your knowledge</h2>
@@ -53,6 +53,67 @@
                     <i class="fas fa-play"></i> Start Quiz
                 </button>
         </div>
+
+        <!-- Quiz screen -->
+         <div class="screen quiz-screen" id="quizScreen">
+            <div class="quiz-header">
+                <div class="question-count" id="questionCount">Question1 of 10</div>
+                <div class="timer" id="timer">00:30</div>
+            </div>
+
+            <div class="question-text" id="questionTest">
+                <!-- Question will be insert here -->
+                 JavaSript and Programming
+            </div>
+
+            <div class="options-container" id="optionsContainer">
+
+            </div>
+
+            <div class="navigation">
+                <button class="btn" id="previousBtn">
+                    <i class="fas fa-arrow-left"></i> Previous
+                </button>
+                <button class="btn" id="nextBtn">
+                    Next <i class="fas fa-arrow-right"></i>
+                </button>
+                <button class="btn btn-primary" id="submitBtn">
+                    Submit <i class="fas fa-check"></i>
+                </button>
+            </div>
+         </div>
+
+         <!-- results screen -->
+          <div class="screen results-screen" id="resultsScreen">
+            <div class="results-icon">
+                <i class="fas-fa-trophy"></i>
+            </div>
+            <div class="score-text" id="scoreText">You scored 8 out of 10!</div>
+            <div class="score-detail" id="scoreDetail">Great job! You have excelent knowledge</div>
+
+            <div class="progress-bar">
+                <div class="progress" id="progressBar" style="width: 80%;"></div>
+            </div>
+
+            <div class="stats">
+                <div class="stat-card">
+                    <div class="stat-value" id="correctAnswers">8</div>
+                    <div class="stat-label">Correct Answer</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="incorrectAnswers">2</div>
+                    <div class="stat-label">Incorrect Answer</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="timeSpent">02:00</div>
+                    <div class="stat-label">Time Spent</div>
+                </div>
+            </div>
+
+            <button class="btn btn-primary" id="resetBtn">
+                <i class="fas fa-redo"></i> Try Again
+            </button>
+          </div>
     </div>
 </body>
 </html>
