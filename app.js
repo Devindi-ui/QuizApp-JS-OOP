@@ -235,3 +235,358 @@ class Quiz{
         ${seconds.toString().padStart(2,'0')}`;
     }
 }
+
+class User{
+    constructor(name){
+        this._name = name;
+        this._quizzesTaken = 0;
+        this._totalScore = 0;
+        this._totalPossibleScore = 0;
+    }
+
+    get name(){
+        return this._name;
+    }
+
+    completeQuiz(quiz){
+        this._quizzesTaken++;
+        this._totalScore += quiz.score;
+        this._totalPossibleScore += quiz.totalPoints;
+    }
+
+    get averageScore(){
+        if(this._quizzesTaken === 0) return 0;
+        return (this._totalScore / this._totalPossibleScore) = 100;
+    }
+
+    get stats(){
+        return{
+            quizzesTaken: this._quizzesTaken,
+            totalScore: this._totalScore,
+            totalPossibleScore: this._totalPossibleScore,
+            averageScore: this.averageScore
+        }
+    }
+}
+
+class QuizManager{
+    //singleton to manage quize creation and user sections
+
+    constructor(){
+        if (QuizManager.instance){
+            return QuizManager.instance;
+        }
+
+    this._currentQuiz = null;
+    this._currentUser = null;
+    this._quizzes = {
+        general: [
+                        new MultipleChoiceQuestion(
+                            1,
+                            "What is the capital of France?",
+                            ["London", "Berlin", "Paris", "Madrid"],
+                            "C"
+                        ),
+                        new TrueFalseQuestion(
+                            2,
+                            "The Earth is the third planet from the Sun.",
+                            true
+                        ),
+                        new MultipleChoiceQuestion(
+                            3,
+                            "Which element has the chemical symbol 'O'?",
+                            ["Gold", "Oxygen", "Osmium", "Oganesson"],
+                            "B"
+                        ),
+                        new MultipleChoiceQuestion(
+                            4,
+                            "Who painted the Mona Lisa?",
+                            ["Vincent van Gogh", "Pablo Picasso", "Leonardo da Vinci", "Michelangelo"],
+                            "C"
+                        ),
+                        new TrueFalseQuestion(
+                            5,
+                            "JavaScript is a statically typed language.",
+                            false
+                        )
+                    ],
+                    science: [
+                        new MultipleChoiceQuestion(
+                            1,
+                            "What is the smallest unit of life?",
+                            ["Atom", "Cell", "Molecule", "Organelle"],
+                            "B",
+                            2
+                        ),
+                        new MultipleChoiceQuestion(
+                            2,
+                            "Which planet is known as the Red Planet?",
+                            ["Venus", "Mars", "Jupiter", "Saturn"],
+                            "B"
+                        ),
+                        new TrueFalseQuestion(
+                            3,
+                            "Light travels faster than sound.",
+                            true
+                        ),
+                        new MultipleChoiceQuestion(
+                            4,
+                            "What is the chemical formula for water?",
+                            ["H2O", "CO2", "NaCl", "O2"],
+                            "A"
+                        ),
+                        new MultipleChoiceQuestion(
+                            5,
+                            "Which scientist proposed the theory of relativity?",
+                            ["Isaac Newton", "Albert Einstein", "Niels Bohr", "Stephen Hawking"],
+                            "B",
+                            2
+                        )
+                    ],
+                    programming: [
+                        new MultipleChoiceQuestion(
+                            1,
+                            "Which of the following is not a JavaScript data type?",
+                            ["String", "Boolean", "Float", "Symbol"],
+                            "C"
+                        ),
+            new TrueFalseQuestion(
+                2,
+                "CSS is a programming language.",
+                false
+            ),
+            new MultipleChoiceQuestion(
+                3,
+                "Which keyword is used to declare a variable in JavaScript?",
+                ["var", "let", "const", "All of the above"],
+                "D",
+                2
+            ),
+            new MultipleChoiceQuestion(
+                4,
+                "What does API stand for?",
+                ["Application Programming Interface", "Advanced Programming Instruction", "Application Process Integration", "Automated Programming Interface"],
+                "A"
+            ),
+            new MultipleChoiceQuestion(
+                5,
+                "Which method is used to add an element to the end of an array in JavaScript?",
+                ["push()", "pop()", "shift()", "unshift()"],
+                "A"
+            )
+        ]
+    };
+
+    QuizeManager.instance = this;
+
+}
+    createQuiz(type){
+        if(this._quizzes[type]){
+            this._currentQuiz = new Quiz(this._quizzes[type]);
+            return this._currentQuiz;
+        }
+    }
+
+    getCurrentQuiz(){
+        return this._currentQuiz;
+    }
+
+    setCurrentUser(user){
+        this._currentUser = user;
+    }
+
+    getCurrentUser(){
+        return this._currentUser;
+    }
+
+    getQuizTypes(){
+        return Object.keys(this_quizzes);
+    }
+}
+
+class UIController{
+    //Handle all DOM manipulation and user interactions
+
+    constructor(){
+        this.QuizManager = new QuizManager();
+        this.initializeEventListners();
+    }
+
+    initializeEventListners(){
+        document.getElementById('startBtn').addEventListener('click', () => {
+            const selectedQuiz = document.querySelector('option-card');
+            if(selectedQuiz){
+                this.startQuiz(selectedQuiz.dataset.quizType);
+            }else{
+                alert('Please select a quize type first');
+            }
+        });
+
+        //quiz option selection
+        document.querySelectorAll('.option-card').forEach(card => {
+            card.addEventListener('click', () => {
+                document.querySelectorAll('.option-card').forEach
+                (c => c.classList.remove('active'));
+                card.classList.add('active');
+            })
+        })
+
+        //navigation buttons
+        document.getElementById('nextBtn').addEventListener
+        ('click', () => {
+            this.nextQuestion();
+        });
+        document.getElementById('previousBtn').addEventListener
+        ('click', () => {
+            this.previousQuestion();
+        });
+        document.getElementById('submitBtn').addEventListener
+        ('click', () => {
+            this.submitQuiz();
+        });
+
+        // restart quiz
+        // document.getElementById('restartBtn').addEventListener
+        // ('click', () => {
+        //     this.showScreen('welcomeScreen');
+        // });
+    }
+
+    startQuiz(quizType){
+        const quiz = this.QuizManager.createQuiz(quizType);
+        if(quiz){
+            //Create a default user for the quiz
+            const user = new User ('Guest');
+            this.QuizManager.setCurrentUser(user)
+
+            quiz.start();
+            this.showScreen('quizScreen');
+            this.displayQuestion();
+            this.updateTimerDisplay();
+
+            setInterval(() => {
+                this.updateTimerDisplay();
+            },1000)
+        }
+    }
+
+    displayQuestion(){
+        const quiz = this.QuizManager.getCurrentQuiz();
+        if(!quiz) return;
+
+        const question = quiz.currentQuestion;
+        document.getElementById('questionCount').textContent = 
+        `Question ${quiz._currentQuestionIndex + 1} of ${quiz.questions.length}`;
+
+        document.getElementById('questionText').textContent = question.text;
+
+        const optionsContainer = document.getElementById('optionsContainer');
+        question.displayOptions(optionsContainer);
+
+        //show/hide navigation buttons
+        document.getElementById('previousBtn').style.display = 
+        quiz._currentQuestionIndex > 0 ? 'block' : 'none';
+        document.getElementById('nextBtn').style.display = 
+        quiz._currentQuestionIndex < quiz.questions.length ? 'block' : 'none';
+        document.getElementById('submitBtn').style.display = 
+        quiz._currentQuestionIndex === quiz.questions.length - 1 ? 'block' : 'none';
+    }
+
+    updateTimerDisplay(){
+        const quiz = this.QuizManager.getCurrentQuiz();
+        if(!quiz) return;
+
+        document.getElementById('timer').textContent =
+            `00:${quiz.timeRemaining.toString().padStart(2, '0')}`;
+    }
+
+    nextQuestion(){
+        const quiz = this.quizManager.getCurrentQuiz();
+        if(!quiz) return;
+
+        //save answer before moving to next question
+        const selectedOption = document.querySelector('.option.selected');
+        if(selectedOption){
+            quiz.submitAnswer(selectedOption.dataset.value);
+        }
+
+        if(quiz.nextQuestion()){
+            this.displayQuestion();
+        }else{
+            this.submitQuiz();
+        }
+    }
+
+    previousQuestion(){
+        const quiz = this.quizManager.getCurrentQuiz();
+        if(!quiz) return;
+
+        if(quiz.previousQuestion()){
+            this.displayQuestion();
+        }
+    }
+
+    submitQuiz(){
+        const quiz = this.quizemanager.getCurrentQuiz();
+        const user = this.quizManager.getCurrentUser();
+
+        if(!user || !quiz) return;
+
+        const selectedOption = document.querySelector('.option.selected');
+        if(selectedOption){
+            quiz.submitAnswer(selectedOption.dataset.value);
+        }
+
+        quiz.end();
+        user.completeQuiz(quiz);
+
+        this.showResults();
+    }
+
+    showResults(){
+        const quiz = this.quizemanager.getCurrentQuiz();
+        const user = this.quizManager.getCurrentUser();
+
+        if(!user || !quiz) return;
+
+        const percentage = (quiz.score / quiz.totalPoints) * 100;
+
+        document.getElementById('scoreText').textContent = 
+            `Your score ${quiz.score} out of ${quiz.totalPoints}!`;
+
+        document.getElementById('scoreDetail').textContent =
+            this.getScoreMessage(percentage);
+
+        document.getElementById('correctAnswers').textContent = 
+            quiz.userAnswers.filter((answer, index) => 
+                quiz.questions[index].checkAnswer(answer)
+            ).length;
+
+        document.getElementById('incorrectAnswer').textContent =
+            quiz.questions.length - document.getElementById('correctAnswers').textContent;
+
+        document.getElementById('timeSpent').textContent = quiz.formatTimeSpent;
+        document.getElementById('progressBar').style.width = `${percentage}`;
+
+        this.showScreen('resultsScreen');
+    }
+
+    getScoreMessage(percentage){
+        if(percentage >= 90) return "Outstanding! You're a expert!";
+        if(percentage >= 70) return "Great job! You have excelent knowledge!";
+        if(percentage >=50) return "Good effort! Keep learning and improve yourself!";
+        return "Keep practicing! You'll do better next time";
+    }
+
+    showScreen(screenId){
+        document.querySelectorAll('.screen').forEach(screen => {
+            screen.classList.remove('active');
+        });
+        document.getElementById(screenId).classList.add('active');
+    }
+}
+
+//Initialize the application when DOM is loaded
+document.addEventListener('DOMContentLoaded', () => {
+    const uiController = new UIController();
+})

@@ -198,6 +198,39 @@ header{
     margin-bottom: 30px;
 }
 
+.option{
+    background: white;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border: 2px solid #e9ecef;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    padding: 18px;
+    font-weight: 500;
+    transition: var(--transition);
+}
+
+.option:hover{
+    border-color: var(--primary);
+    background-color: #f8f9ff;
+}
+
+.option.selected{
+    border-color: var(--primary);
+    background-color: #eef0ff;
+}
+
+.option.correct{
+    border-color: #28a745;
+    background-color: #d4edda;
+}
+
+.option-incorrect{
+    border-color: #dc3545;
+    background-color: #f8d7da;
+}
+
 .navigation{
     display: flex;
     justify-content: space-between;
