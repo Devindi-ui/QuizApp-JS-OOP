@@ -1,27 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <title>QuizMaster - OOP Demostrate App</title>
     <link rel="stylesheet" href="styles.css">
-    <title>QuzMaster - OOP Demonstrate App</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
+
 <body>
     <div class="container">
         <header>
             <div class="logo">Quiz <span>Master</span></div>
-            <div class="subtitle">Test Your Knowledge With Our Interacting Quiz</div>
+            <div class="subtitle">Test your knowledge with our interactice quiz</div>
         </header>
 
         <div class="content">
             <!-- welcome screen -->
-             <div class="screen welcome-screen active" id="welcomeScreen">
-                <i class="fas fa-brain welcome-icon"></i>
-             </div>
-             <h2 class="welcome-message">Welcome to QuizMaster! Challlenge 
-                yourself with various quiz types and improve your knowledge</h2>
+            <div class="screen welcome-screen active" id="welcomeScreen">
+                <div class="welcome-icon">
+                    <i class="fas fa-brain"></i>
+                </div>
+                <h2 class="welcome-message">Welcome to QuizMaster! Challenge yourself with various quiz types and
+                    improve your knowledge</h2>
 
                 <div class="quiz-options">
                     <div class="option-card" data-quiz-type="general">
@@ -37,7 +39,7 @@
                             <i class="fas fa-flask"></i>
                         </div>
                         <div class="option-title">Science & Technology</div>
-                        <p>Test your Science knowledge</p>
+                        <p>Test your science knowledge</p>
                     </div>
 
                     <div class="option-card" data-quiz-type="programming">
@@ -45,76 +47,80 @@
                             <i class="fas fa-code"></i>
                         </div>
                         <div class="option-title">Programming</div>
-                        <p>JavaSript and Programming concepts</p>
+                        <p>Javascript and programming concepts</p>
                     </div>
                 </div>
 
                 <button class="btn btn-primary btn-lg" id="startBtn">
                     <i class="fas fa-play"></i> Start Quiz
                 </button>
+            </div>
+
+            <!-- Quiz Screen -->
+            <div class="screen quiz-screen" id="quizScreen">
+                <div class="quiz-header">
+                    <div class="question-count" id="questionCount">Question 1 of 10</div>
+                    <div class="timer" id="timer">00:30</div>
+                </div>
+
+                <div class="question-text" id="questionText">
+                    <!-- Question will be insert here -->
+                    Lorem ipsum dolor sit amet consectetur
+                </div>
+
+                <div class="options-container" id="optionsContainer">
+
+                </div>
+
+                <div class="navigation">
+                    <button class="btn" id="previousBtn">
+                        <i class="fas fa-arrow-left"></i> Previous
+                    </button>
+                    <button class="btn btn-primary" id="nextBtn">
+                        Next <i class="fas fa-arrow-right"></i>
+                    </button>
+                    <button class="btn btn-primary" id="submitBtn">
+                        Submit <i class="fas fa-check"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Results Screen -->
+            <div class="screen results-screen" id="resultsScreen">
+                <div class="results-icon">
+                    <i class="fas fa-trophy"></i>
+                </div>
+                <div class="score-text" id="scoreText">You scored 8 out of 10!</div>
+                <div class="score-detail" id="scoreDetail">Great job! You have excellent
+                    knowledge</div>
+
+                <div class="progress-bar">
+                    <div class="progress" id="progressBar" style="width: 80%;"></div>
+                </div>
+
+                <div class="stats">
+                    <div class="stat-card">
+                        <div class="stat-value" id="correctAnswers">8</div>
+                        <div class="stat-label">Correct Answers</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="incorrectAnswers">2</div>
+                        <div class="stat-label">Incorrect Answers</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="timeSpent">03:45</div>
+                        <div class="stat-label">Time Spent</div>
+                    </div>
+                </div>
+
+                <button class="btn btn-primary" id="resetBtn">
+                    <i class="fas fa-redo"></i> Try Again
+                </button>
+            </div>
         </div>
-
-        <!-- Quiz screen -->
-         <div class="screen quiz-screen" id="quizScreen">
-            <div class="quiz-header">
-                <div class="question-count" id="questionCount">Question1 of 10</div>
-                <div class="timer" id="timer">00:30</div>
-            </div>
-
-            <div class="question-text" id="questionTest">
-                <!-- Question will be insert here -->
-                 JavaSript and Programming
-            </div>
-
-            <div class="options-container" id="optionsContainer">
-
-            </div>
-
-            <div class="navigation">
-                <button class="btn" id="previousBtn">
-                    <i class="fas fa-arrow-left"></i> Previous
-                </button>
-                <button class="btn" id="nextBtn">
-                    Next <i class="fas fa-arrow-right"></i>
-                </button>
-                <button class="btn btn-primary" id="submitBtn">
-                    Submit <i class="fas fa-check"></i>
-                </button>
-            </div>
-         </div>
-
-         <!-- results screen -->
-          <div class="screen results-screen" id="resultsScreen">
-            <div class="results-icon">
-                <i class="fas-fa-trophy"></i>
-            </div>
-            <div class="score-text" id="scoreText">You scored 8 out of 10!</div>
-            <div class="score-detail" id="scoreDetail">Great job! You have excelent knowledge</div>
-
-            <div class="progress-bar">
-                <div class="progress" id="progressBar" style="width: 80%;"></div>
-            </div>
-
-            <div class="stats">
-                <div class="stat-card">
-                    <div class="stat-value" id="correctAnswers">8</div>
-                    <div class="stat-label">Correct Answer</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value" id="incorrectAnswers">2</div>
-                    <div class="stat-label">Incorrect Answer</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value" id="timeSpent">02:00</div>
-                    <div class="stat-label">Time Spent</div>
-                </div>
-            </div>
-
-            <button class="btn btn-primary" id="resetBtn">
-                <i class="fas fa-redo"></i> Try Again
-            </button>
-          </div>
     </div>
+
     <script src="app.js"></script>
 </body>
+
 </html>

@@ -133,6 +133,10 @@ header{
     font-style: italic;
 }
 
+.option-card.active{
+    border: 2px solid var(--primary);
+}
+
 .btn{
     padding: 14px 28px;
     border: none;
