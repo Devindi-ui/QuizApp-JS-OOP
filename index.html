@@ -17,6 +17,58 @@
         </header>
 
         <div class="content">
+
+            <!-- Auth Screen -->
+             <!-- Login -->
+              <div class="screen auth-screen active" id="loginScreen">
+                <div class="auth-icon">
+                    <i class="fas fa-user-circle"></i>
+                </div>
+                <h2 class="auth-title">Login to QuizMaster</h2>
+                <form class="auth-form">
+                    <div class="form-group">
+                        <input type="email" placeholder="Email" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="password" placeholder="Password" required>
+                    </div>
+                    <button class="btn btn-primary btn-lg">
+                        <i class="fas fa-sign-in-alt"></i> Login
+                    </button>
+                </form>
+                <p class="auth-switch">Don't have an account?
+                    <a href="#" id="showSignup">Sign Up</a>
+                </p>
+              </div>
+
+              <!-- Signup screen -->
+               <div class="screen auth-screen" id="signupScreen">
+                <div class="auth-icon">
+                    <i class="fas fa-user-plus"></i>
+                </div>
+                <h2 class="auth-title">Create an Account</h2>
+                <form class="auth-form">
+                    <div class="form-group">
+                        <input type="text" placeholder="Full Name" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="email" placeholder="Email" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="password" placeholder="Password" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="password" placeholder="Confirm Password" required>
+                    </div>
+                    <button class="btn btn-primary btn-lg">
+                        <i class="fas fa-user-check"></i> Sign Up
+                    </button>
+                </form>
+                <p class="auth-switch">Already have an account?
+                    <a href="" id="showLogin">Login</a>
+                </p>
+               </div>
+
             <!-- welcome screen -->
             <div class="screen welcome-screen active" id="welcomeScreen">
                 <div class="welcome-icon">
