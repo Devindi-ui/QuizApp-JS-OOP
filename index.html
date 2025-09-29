@@ -11,6 +11,11 @@
 
 <body>
     <div class="container">
+        <div class="user-actions">
+            <div class="btn btn-logout" id="logoutBtn">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </div>
+        </div>
         <header>
             <div class="logo">Quiz <span>Master</span></div>
             <div class="subtitle">Test your knowledge with our interactice quiz</div>
@@ -32,12 +37,12 @@
                     <div class="form-group">
                         <input type="password" placeholder="Password" required>
                     </div>
-                    <button class="btn btn-primary btn-lg">
+                    <button class="btn btn-primary btn-lg" type="submit">
                         <i class="fas fa-sign-in-alt"></i> Login
                     </button>
                 </form>
                 <p class="auth-switch">Don't have an account?
-                    <a href="#" id="showSignup">Sign Up</a>
+                    <a href="" id="showSignup">Sign Up</a>
                 </p>
               </div>
 
@@ -60,7 +65,7 @@
                     <div class="form-group">
                         <input type="password" placeholder="Confirm Password" required>
                     </div>
-                    <button class="btn btn-primary btn-lg">
+                    <button class="btn btn-primary btn-lg" type="submit">
                         <i class="fas fa-user-check"></i> Sign Up
                     </button>
                 </form>
@@ -70,7 +75,8 @@
                </div>
 
             <!-- welcome screen -->
-            <div class="screen welcome-screen active" id="welcomeScreen">
+             
+            <div class="screen welcome-screen" id="welcomeScreen">
                 <div class="welcome-icon">
                     <i class="fas fa-brain"></i>
                 </div>

@@ -1,5 +1,77 @@
-//Authentication Part
+//Authentication System 
+class AuthManager{
+  constructor(){
+    if(AuthManager.instance){
+      return AuthManager.instance;
+    }
 
+    this._currentUser = null;
+    this._users = JSON.parse(localStorage.getItem('quizmaster_users')) || [];
+    AuthManager.instance = this;
+  }
+
+  //Register new user
+  register(userData){
+    //check if user already exists
+    if(this._users.find(user => user.email === userData.email)){
+      return{success: false, message: 'User already exists with this email'};
+    }
+
+    const newUser = {
+      id: Date.now().toString(),
+      name: userData.name,
+      email: userData.email,
+      password: userData.password,
+      createdAt: new Date().toString()
+    };
+
+    this._users.push(newUser);
+    this._saveToStorage();
+
+    return{success: true, user: newUser};
+  }
+
+  //Login user
+  login(email, password){
+    const user = this._users.find(u => u.email === email && u.password === password);
+    if(user){
+      this._currentUser = new User(user.name);
+      this._currentUser._id = user.id;
+      localStorage.set('quizmaster_currentUser', JSON.stringify(user));
+      return{success: true, user: this._currentUser};
+    }
+    return{success: false, message: 'Invalid email or password'};
+  }
+
+  //Get current user
+  getCurrentUser(){
+    if(!this._currentUser){
+      const storedUser = localStorage.getItem('quizmaster_currentUser');
+      if(storedUser){
+        const userData = JSON.parse(storedUser);
+        this._currentUser = new User(userData.name);
+        this._currentUser._id = userData.id;
+      }
+    }
+    return this._currentUser;
+  }
+
+  //Logout user
+  logout(){
+    this._currentUser = null;
+    localStorage.removeItem('quizmaster_currentUser');
+  }
+
+  //save users to local storage
+  _saveToStorage(){
+    localStorage.setItem('quizmaster_users', JSON.stringify(this._users));
+  }
+
+  //Check if user is authenticated
+  isAuthenticated(){
+    return this.getCurrentUser() !== null;
+  }
+}
 
 
 //Base question class
@@ -403,7 +475,7 @@ class QuizManager {
   }
 
   getQuizTypes () {
-    return Object.keys(this_quizzes)
+    return Object.keys(this._quizzes);
   }
 }
 
@@ -411,11 +483,64 @@ class UIController {
   //Handle all DOM manipulation and user interactions
 
   constructor () {
-    this.QuizManager = new QuizManager()
-    this.initializeEventListners()
+    this.QuizManager = new QuizManager();
+    this.AuthManager = new AuthManager(); //Add authmanager
+    this.initializeEventListeners();
+    this.checkAuthentication(); //Check the auth status on init
   }
 
-  initializeEventListners () {
+  //Check Authentication status
+  checkAuthentication(){
+    if(this.AuthManager.isAuthenticated()){
+      const user = this.AuthManager.getCurrentUser();
+      this.QuizManager.setCurrentUser(user);
+      this.showScreen('welcomeScreen');
+    }else{
+      this.showScreen('loginScreen');
+    }
+  }
+
+  initializeEventListeners () {
+    //Auth navigation buttons
+    document.getElementById("showSignup").addEventListener('click', (e) => {
+      e.preventDefault();
+      this.showScreen('signupScreen');
+    });
+
+    document.getElementById("showLogin").addEventListener('click', (e) => {
+      e.preventDefault();
+      this.showScreen('loginScreen');
+    });
+
+    //Logout functionallity
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+      this.handleLogout();
+    });
+
+    //Auth Event Listners
+    document.getElementById('showSignup').addEventListener('click', (e) => {
+      e.preventDefault();
+      this.showScreen('signupScreen');
+    });
+
+    document.getElementById('showLogin').addEventListener('click', (e) => {
+      e.preventDefault();
+      this.showScreen('loginScreen');
+    });
+
+    //Login from submission
+    document.querySelector('#loginScreen .auth-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      this.handleLogin();
+    });
+
+    //Signup form submission
+    document.querySelector('#signupScreen .auth-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      this.handleSignup();
+    });
+
+    ////Quiz event listners
     document.getElementById('startBtn').addEventListener('click', () => {
       const selectedQuiz = document.querySelector('.option-card.active')
       if (selectedQuiz) {
@@ -453,17 +578,66 @@ class UIController {
     // });
   }
 
+  //Handle user login
+  handleLogin(){
+    const email = document.querySelector('#loginScreen input[type = "email"]').value;
+    const password = document.querySelector('#loginScreen input[type = "password"]').value;
+
+    const result = this.AuthManager.login(email, password);
+    if(result.success){
+      this.QuizManager.setCurrentUser(result.user);
+      this.showScreen('welcomeScreen');
+    } else {
+      alert(result.message);
+    }
+  }
+
+  //Handle user registration
+  handleSignup(){
+    const name = document.querySelector('#signupScreen input[type = "text"]').value;
+    const email = document.querySelector('#signupScreen input[type = "email"]').value;
+    const password = document.querySelector('#signupScreen input[type = "password"]').value;
+    const confirmPassword = document.querySelectorAll('#signupScreen input[type = "password"]')[1].value;
+
+    if(password !== confirmPassword){
+      alert('Passwords do not match!');
+      return;
+    }
+
+    const result = this.AuthManager.register({name, email, password});
+    if(result.success){
+      alert('Registration successful! Please login.');
+      this.showScreen('loginScreen');
+    } else {
+      alert(result.message);
+    }
+  }
+
+  //Handle user logout
+  handleLogout(){
+    this.AuthManager.logout();
+    this.QuizManager.setCurrentUser(null);
+
+    //clear any form fields
+    document.querySelectorAll('.auth-form input').forEach(input => {
+      input.value = '';
+    });
+
+    this.showScreen('loginScreen');
+    alert('You have been logged out successfully!');
+  }
+
   startQuiz (quizType) {
     const quiz = this.QuizManager.createQuiz(quizType);
     if (quiz) {
       //Create a default user for the quiz
-      const user = new User('Guest')
-      this.QuizManager.setCurrentUser(user)
+      const user = currentUser;
+      this.QuizManager.setCurrentUser(user);
 
       quiz.start();
       this.showScreen('quizScreen');
       this.displayQuestion();
-      this.updateTimerDisplay()
+      this.updateTimerDisplay();
 
       setInterval(() => {
         this.updateTimerDisplay()
@@ -594,6 +768,11 @@ class UIController {
     document.getElementById(screenId).classList.add('active');
   }
 }
+
+//localstorage method correction
+Storage.prototype.set = function(key, value){
+  this.setItem(key, value);
+};
 
 //Initialize the application when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
